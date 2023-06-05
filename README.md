@@ -2,7 +2,7 @@
 
 A package to manage a position field in an Ecto schema.
 
-Documentation: [https://hex.pm/ecto_position](https://hex.pm/ecto_position)
+[Documentation](https://hexdocs.pm/ecto_position)
 
 ## Installation
 
