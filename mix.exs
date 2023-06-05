@@ -7,7 +7,9 @@ defmodule EctoPosition.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+      docs: docs()
     ]
   end
 
@@ -18,10 +20,28 @@ defmodule EctoPosition.MixProject do
     ]
   end
 
+  def docs do
+    [
+      main: "EctoPosition",
+      source_url_pattern:
+        "https://github.com/baldwindavid/ecto_position/blob/main/%{path}#L%{line}"
+    ]
+  end
+
+  def package do
+    [
+      maintainers: ["David Baldwin"],
+      licenses: ["Apache-2.0"],
+      links: %{"GitHub" => "https://github.com/baldwindavid/ecto_position"},
+      files: ~w(mix.exs README.md lib)
+    ]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 3.0"}
+      {:ecto, "~> 3.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 end
