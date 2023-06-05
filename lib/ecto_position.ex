@@ -87,6 +87,42 @@ defmodule EctoPosition do
     end
   end
 
+  # If the desired position is `{:above, other_struct}`, then we return the
+  # position of the other struct. If the other struct is nil, then we return 0.
+  defp calculate_position(_repo, _scope, _struct, {:above, nil}, _repo_opts), do: {:ok, 0}
+
+  defp calculate_position(repo, scope, _struct, {:above, other_struct}, repo_opts) do
+    old_position_query = get_old_position_query(scope, other_struct)
+
+    with position_of_other_struct <- repo.one(old_position_query, repo_opts) do
+      {:ok, position_of_other_struct}
+    end
+  end
+
+  # If the desired position is `{:below, other_struct}`, then we return the
+  # position of the other struct + 1 or the bottom position if already at the
+  # bottom. If the other struct is nil, then we return the bottom position based
+  # upon existing count.
+  defp calculate_position(repo, scope, _struct, {:below, nil}, repo_opts) do
+    count = repo.one(from(t in scope, select: count(t.id)), repo_opts)
+    {:ok, count - 1}
+  end
+
+  defp calculate_position(repo, scope, _struct, {:below, other_struct}, repo_opts) do
+    old_position_query = get_old_position_query(scope, other_struct)
+
+    with position_of_other_struct <- repo.one(old_position_query, repo_opts),
+         count <- repo.one(from(t in scope, select: count(t.id)), repo_opts) do
+      bottom_position = count - 1
+
+      if position_of_other_struct >= bottom_position do
+        {:ok, bottom_position}
+      else
+        {:ok, position_of_other_struct + 1}
+      end
+    end
+  end
+
   # Decrement the position of all records that are greater than the old
   # position.
   defp decrement_positions_for_removed_position(repo, scope, struct, repo_opts) do
