@@ -1,6 +1,8 @@
 defmodule EctoPosition do
   import Ecto.Query
 
+  alias Ecto.Changeset
+
   def add(repo, %type{} = struct, at_position, opts \\ []) do
     {scope, repo_opts} = Keyword.pop(opts, :scope, type)
 
@@ -8,7 +10,7 @@ defmodule EctoPosition do
            calculate_position(repo, scope, struct, at_position, repo_opts),
          {:ok, _struct} <-
            increment_positions_for_added_position(repo, scope, struct, position_to_add, repo_opts) do
-      set_new_position(repo, scope, struct, position_to_add, repo_opts)
+      set_new_position(repo, struct, position_to_add, repo_opts)
     end
   end
 
@@ -21,7 +23,7 @@ defmodule EctoPosition do
            decrement_positions_for_changed_position(repo, scope, struct, new_position, repo_opts),
          {:ok, _struct} <-
            increment_positions_for_changed_position(repo, scope, struct, new_position, repo_opts) do
-      set_new_position(repo, scope, struct, new_position, repo_opts)
+      set_new_position(repo, struct, new_position, repo_opts)
     end
   end
 
@@ -34,6 +36,12 @@ defmodule EctoPosition do
   # Get the old position of the record we are repositioning.
   defp get_old_position_query(scope, struct) do
     from(record in scope, where: record.id == ^struct.id, select: record.position)
+  end
+
+  # If the desired position is less than the old position, then we return 0.
+  defp calculate_position(_repo, _scope, _struct, at_position, _repo_opts)
+       when is_integer(at_position) and at_position < 0 do
+    {:ok, 0}
   end
 
   # If the desired position is less than the count of all records, then we
@@ -193,16 +201,11 @@ defmodule EctoPosition do
   end
 
   # Update the position of the record we are repositioning.
-  defp set_new_position(repo, scope, struct, new_position, repo_opts) do
-    repo.update_all(
-      from(t in scope,
-        where: t.id == ^struct.id,
-        update: [set: [position: ^new_position]]
-      ),
-      [],
-      repo_opts
-    )
+  defp set_new_position(repo, struct, new_position, repo_opts) do
+    repo_opts = Keyword.put(repo_opts, :returning, true)
 
-    {:ok, new_position}
+    struct
+    |> Changeset.change(position: new_position)
+    |> repo.update(repo_opts)
   end
 end
