@@ -4,11 +4,13 @@ defmodule EctoPosition.MixProject do
   def project do
     [
       app: :ecto_position,
-      version: "0.3.0",
+      version: "0.4.0",
       description: "Manage a position field in an Ecto schema",
       elixir: "~> 1.14",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      aliases: aliases(),
       package: package(),
       docs: docs()
     ]
@@ -38,9 +40,18 @@ defmodule EctoPosition.MixProject do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
+  defp aliases do
+    [test: ["ecto.create --quiet", "ecto.migrate", "test"]]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, "~> 0.15"},
       {:ecto, "~> 3.0"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]

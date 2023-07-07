@@ -9,14 +9,14 @@ A package to manage a position field in an Ecto schema.
 ```elixir
 def deps do
   [
-    {:ecto_position, "~> 0.3.0"}
+    {:ecto_position, "~> 0.4.0"}
   ]
 end
 ```
 
 ## Roadmap
 
-- [ ] Add tests
+- [x] Add tests
 - [ ] Add documentation
 - [x] Add support for `:before` and `:after` options
 - [ ] Add support for alternate storage strategies (maybe)
