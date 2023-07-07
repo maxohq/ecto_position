@@ -4,7 +4,7 @@ defmodule EctoPosition.MixProject do
   def project do
     [
       app: :ecto_position,
-      version: "0.4.0",
+      version: "0.4.1",
       description: "Manage a position field in an Ecto schema",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -50,9 +50,8 @@ defmodule EctoPosition.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sql, "~> 3.0"},
-      {:postgrex, "~> 0.15"},
-      {:ecto, "~> 3.0"},
+      {:ecto_sql, ">= 3.0.0"},
+      {:postgrex, ">= 0.0.0"},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
