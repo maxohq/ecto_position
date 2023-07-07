@@ -33,7 +33,7 @@ defmodule EctoPosition do
     decrement_positions_for_removed_position(repo, scope, struct, repo_opts)
   end
 
-  def harmonize_positions(repo, scope, opts \\ []) do
+  def reset(repo, scope, opts \\ []) do
     structs = repo.all(from(record in scope, order_by: :position), opts)
 
     updated_structs =

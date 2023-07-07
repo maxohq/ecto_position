@@ -4,7 +4,7 @@ defmodule EctoPosition.MixProject do
   def project do
     [
       app: :ecto_position,
-      version: "0.4.1",
+      version: "0.5.0",
       description: "Manage a position field in an Ecto schema",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),

@@ -539,8 +539,8 @@ defmodule EctoPositionTest do
     end
   end
 
-  describe "harmonize_positions/3" do
-    test "repositions records" do
+  describe "reset/3" do
+    test "repositions all records in scope" do
       {:ok, %{id: first_todo_id}} = Repo.insert(%Todo{position: 100})
       {:ok, %{id: middle_todo_id}} = Repo.insert(%Todo{position: 300})
       {:ok, %{id: last_todo_id}} = Repo.insert(%Todo{position: 500})
@@ -550,7 +550,7 @@ defmodule EctoPositionTest do
                 %{id: ^first_todo_id, position: 0},
                 %{id: ^middle_todo_id, position: 1},
                 %{id: ^last_todo_id, position: 2}
-              ]} = EctoPosition.harmonize_positions(Repo, Todo)
+              ]} = EctoPosition.reset(Repo, Todo)
     end
 
     test "can be scoped to a query" do
@@ -570,7 +570,7 @@ defmodule EctoPositionTest do
                 %{id: ^first_todo_id, position: 0},
                 %{id: ^middle_todo_id, position: 1},
                 %{id: ^last_todo_id, position: 2}
-              ]} = EctoPosition.harmonize_positions(Repo, scope)
+              ]} = EctoPosition.reset(Repo, scope)
 
       assert [
                %{id: ^other_category_first_todo_id, position: 0},
@@ -597,7 +597,7 @@ defmodule EctoPositionTest do
                 %{id: ^first_todo_id, position: 0},
                 %{id: ^middle_todo_id, position: 1},
                 %{id: ^last_todo_id, position: 2}
-              ]} = EctoPosition.harmonize_positions(Repo, Todo)
+              ]} = EctoPosition.reset(Repo, Todo)
 
       assert [
                %{id: ^other_prefix_first_todo_id, position: 888},

@@ -9,7 +9,7 @@ A package to manage a position field in an Ecto schema.
 ```elixir
 def deps do
   [
-    {:ecto_position, "~> 0.4.1"}
+    {:ecto_position, "~> 0.5.0"}
   ]
 end
 ```
