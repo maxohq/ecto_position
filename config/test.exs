@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :ecto_position, EctoPosition.Test.Repo,
   adapter: Ecto.Adapters.Postgres,
