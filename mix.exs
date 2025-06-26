@@ -52,7 +52,8 @@ defmodule EctoPosition.MixProject do
     [
       {:ecto_sql, ">= 3.0.0"},
       {:postgrex, ">= 0.0.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:maxo_test_iex, "~> 0.1", only: :test}
     ]
   end
 end
